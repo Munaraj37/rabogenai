@@ -18,23 +18,6 @@ pip install -r ../scripts/requirements.txt
 #List Pip packages
 pip list
 
-# Environment variables
-# Speech resource
-setx SPEECH_REGION ""
-setx SPEECH_KEY ""
-setx SPEECH_PRIVATE_ENDPOINT ""
-
-# OpenAI resource
-setx AZURE_OPENAI_ENDPOINT "https://openai-rabogenai.openai.azure.com/"
-setx AZURE_OPENAI_API_KEY "e91bf1f85ffd4f8b8ec5c7d87fcc1bc6"
-setx AZURE_OPENAI_DEPLOYMENT_NAME "chatmodel-rabogenai"
-setx AZURE_OPENAI_EMBED_DEPLOYMENT_NAME "embeddingmodel-rabogenai"
-
-# Cognitive search resource
-setx COGNITIVE_SEARCH_ENDPOINT "https://csrabogenai.search.windows.net"
-setx COGNITIVE_SEARCH_API_KEY "x9q4J48TFwp4ago80LhWjjibGjzyTR1ztLVsJN8BKqAzSeAy9AGI"
-setx COGNITIVE_SEARCH_INDEX_NAME "vrm-index"
-
 #Assign Role for accesing the index
 Navigate to the Search Service resource. Access Control (IAM) on the left side. 
 +Add --> Add role assignment --> Role --> Search Index Data Contributor and Search Index Data Reader (not sure if necessary)
