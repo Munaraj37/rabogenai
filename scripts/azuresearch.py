@@ -100,10 +100,6 @@ if __name__ == "__main__":
     client = SearchClient(service_endpoint, index_name, credential)
     hotel_docs = get_document_info()
     print("Doc Loaded")
-    #
-    print(hotel_docs)
+    #print(hotel_docs)
     client.upload_documents(documents=hotel_docs)
     print("Completed")
-
-query = "What is the preamble of Indian Constitution"
-vector = Vector()

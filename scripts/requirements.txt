@@ -1,0 +1,11 @@
+requests
+openai==1.30
+pypdf
+Flask
+langchain
+langchain_community
+langchain-text-splitters
+#azure-identity
+azure-cognitiveservices-speech
+azure-ai-translation-text
+azure-search-documents 
