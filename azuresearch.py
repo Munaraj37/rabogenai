@@ -16,18 +16,10 @@ azure_openai_api_key = os.environ.get('AZURE_OPENAI_API_KEY')
 azure_openai_deployment_name = os.environ.get('AZURE_OPENAI_DEPLOYMENT_NAME') # e.g. my-gpt-35-turbo-deployment
 azure_openai_embed_deployment_name = os.environ.get('AZURE_OPENAI_EMBED_DEPLOYMENT_NAME') # e.g. my-gpt-35-turbo-deployment
 
-
 # Cognitive search resource (optional, only required for 'on your data' scenario)
 cognitive_search_endpoint = os.environ.get('COGNITIVE_SEARCH_ENDPOINT') # e.g. https://my-cognitive-search.search.windows.net/
 cognitive_search_api_key = os.environ.get('COGNITIVE_SEARCH_API_KEY')
 cognitive_search_index_name = os.environ.get('COGNITIVE_SEARCH_INDEX_NAME') # e.g. my-search-index
-
-#service_endpoint = 'https://acsrabogenai.search.windows.net' #os.environ["AZURE_SEARCH_SERVICE_ENDPOINT"]
-#index_name = 'vrm-index' #os.environ["AZURE_SEARCH_INDEX_NAME"]
-#key = 'eIvQly2BQv7MpjhhmCH0WYI7fBcqlIweVLecds5QLFAzSeBbtGBa' #os.environ["AZURE_SEARCH_API_KEY"]
-
-#OpenAIEndpoint = 'https://aoairabogenai.openai.azure.com/'
-#OpenAIKey = 'b1d16fbce07644668935410f4c54f74e'
 
 def get_document_info():
 
@@ -36,7 +28,7 @@ def get_document_info():
     from langchain_community.document_loaders import PyPDFLoader
     from langchain.text_splitter import CharacterTextSplitter
 
-    loader = PyPDFLoader(r"D:\Python\input\Constitution.pdf")
+    loader = PyPDFLoader(r"D:\rabogenai\input\GenAIdata.pdf")
     documents = loader.load()
 
     text_splitter = CharacterTextSplitter(chunk_size=1000,chunk_overlap=50)
@@ -49,10 +41,10 @@ def get_document_info():
         
     json_data=json.dumps(docs)
     
-    with open(r"D:\Python\output\HandbookContent.json","w") as f:
+    with open(r"D:\rabogenai\output\HandbookContent.json","w") as f:
         f.write(json_data)
 
-    with open(r"D:\Python\output\HandbookContent.json","r") as f:
+    with open(r"D:\rabogenai\output\HandbookContent.json","r") as f:
         document = json.load(f)
 
     return document
@@ -64,7 +56,7 @@ def get_embeddings(text: str):
     client = openai.AzureOpenAI(
         azure_endpoint=azure_openai_endpoint,
         api_key=azure_openai_api_key,
-        api_version="2023-09-01-preview",
+        api_version="2024-02-01",
     )
     embedding = client.embeddings.create(input=[text], model=azure_openai_embed_deployment_name)
     return embedding.data[0].embedding
@@ -106,6 +98,14 @@ if __name__ == "__main__":
     print("Started")
     index_client = SearchIndexClient(cognitive_search_endpoint, AzureKeyCredential(cognitive_search_api_key))
     index = get_hotel_index(cognitive_search_index_name)
+    try:
+        if index_client.get_index(cognitive_search_index_name):
+            print('Deleting existing index...')
+            index_client.delete_index(cognitive_search_index_name)
+
+    except:
+        print('Index does not exist. No need to delete it.')
+
     index_client.create_index(index)
     client = SearchClient(cognitive_search_endpoint, cognitive_search_index_name, AzureKeyCredential(cognitive_search_api_key))
     hotel_docs = get_document_info()

@@ -48,16 +48,27 @@ def get_hotel_index(query: str):
 
 if __name__ == "__main__":
 
-    query = "What is the Qualifications for election as President"
+    query = "What is the cost of the single account?"
     input_text = get_hotel_index(query)
-    client = openai.AzureOpenAI(azure_endpoint=azure_openai_endpoint,api_key=azure_openai_api_key,api_version="2023-09-01-preview",)
-    completion = client.completions.create(
-        model = azure_openai_deployment_name,
-        prompt = f"Answer Input:{input_text}. Question:{query}",
+#    print(input_text)
+    client = openai.AzureOpenAI(azure_endpoint=azure_openai_endpoint,api_key=azure_openai_api_key,api_version="2024-02-01",)
+#    completion = client.completions.create(
+#        model = azure_openai_deployment_name,
+#        prompt = f"Answer Input:{input_text}. Question:{query}",
         #max_tokens=10,
         #top_p=1,
         #frequency_penalty=0,
         #presence_penalty=0
-    )      
+#    )     
 
-    print(completion.choices[0].text)
+    completion = client.chat.completions.create(
+    model='chatgptmodel',
+    messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": f"Answer Input:{input_text}. Question:{query}"}
+    ]
+    ) 
+
+    print(completion.choices[0].message.content)
+
+#    print(completion.choices[0].text)
