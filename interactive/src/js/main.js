@@ -50,7 +50,7 @@ function removeDocumentReferences(str) {
 // Setup WebRTC
 function setupWebRTC() {
   // Create WebRTC peer connection
-  fetch("/api/getIceServerToken", {
+  fetch("/interactive/api/getIceServerToken", {
     method: "POST"
   })
     .then(async res => {
